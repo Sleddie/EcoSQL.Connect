@@ -9,4 +9,8 @@
     <Company>Blue-Yellow</Company>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EcoSQL.Request\EcoSQL.Request.csproj" />
+  </ItemGroup>
+
 </Project>
