@@ -1,9 +1,14 @@
+using EcoSQL.Request;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace EcoSQL.Connect;
 
-public class ServerInfo
+public class ServerInfo : IValidatableObject, IJsonOnDeserialized
 {
+    protected Dictionary<string, DatabaseInfo> _databases = [];
+
     public string Name
     {
         get => field ??= ToString();
@@ -12,14 +17,21 @@ public class ServerInfo
     public required string Host { get; init; }
     public required string Port { get; init; }
 
-    public required DatabaseInfo ServiceDatabase { get; init; }
+    public IReadOnlyDictionary<string, DatabaseInfo> Databases
+    {
+        get => _databases.AsReadOnly();
+        init => _databases = new(value);
+    }
+
+    public string? ServiceDatabaseName { get; init; }
+    public DatabaseInfo? ServiceDatabase { get; protected set; }
 
     public override string ToString()
     {
         return $"{Host}:{Port}";
     }
 
-    public bool IsValid(out string errorMessage)
+    public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         string props = "";
         bool isValid = true;
@@ -41,12 +53,39 @@ public class ServerInfo
             isValid = false;
         }
 
-        if (isValid)
-            errorMessage = "";
-        else
-            errorMessage = $"Server {props} should be specified.";
+        if (!isValid)
+            yield return new($"Server {props} should be specified.", [nameof(Host), nameof(Port)]);
+    }
 
-        return isValid;
+    public virtual bool IsValid(IMessageUnit? messageUnit = null)
+    {
+        IEnumerable<ValidationResult> errors = Validate(new ValidationContext(this));
+
+        if (errors.Any())
+        {
+            foreach (var error in errors)
+            {
+                messageUnit?.Message = error.ErrorMessage;
+            }
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public virtual void OnDeserialized()
+    {
+        foreach (DatabaseInfo database in Databases.Values)
+        {
+            database.Server = this;
+        }
+
+        if (string.IsNullOrWhiteSpace(ServiceDatabaseName))
+            return;
+
+        if (ServiceDatabase != Databases[ServiceDatabaseName])
+            ServiceDatabase = Databases[ServiceDatabaseName];
     }
 }
 
