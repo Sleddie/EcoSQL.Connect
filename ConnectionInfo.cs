@@ -63,26 +63,9 @@ public class ConnectionInfo : IValidatableObject
                 ]);
     }
 
-    public bool IsValid(IMessageUnit? messageUnit = null)
-    {
-        IEnumerable<ValidationResult> errors = Validate(new(this));
-
-        if (errors.Any())
-        {
-            foreach (var error in errors)
-            {
-                messageUnit?.Message = error.ErrorMessage;
-            }
-
-            return false;
-        }
-
-        return true;
-    }
-
     internal string GetConnectionString(IMessageUnit? messageUnit = null)
     {
-        if (!IsValid(messageUnit))
+        if (!this.IsValid(messageUnit))
             return "";
 
         return string.Format(

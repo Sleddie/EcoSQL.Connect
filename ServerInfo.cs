@@ -57,23 +57,6 @@ public class ServerInfo : IValidatableObject, IJsonOnDeserialized
             yield return new($"Server {props} should be specified.", [nameof(Host), nameof(Port)]);
     }
 
-    public virtual bool IsValid(IMessageUnit? messageUnit = null)
-    {
-        IEnumerable<ValidationResult> errors = Validate(new ValidationContext(this));
-
-        if (errors.Any())
-        {
-            foreach (var error in errors)
-            {
-                messageUnit?.Message = error.ErrorMessage;
-            }
-
-            return false;
-        }
-
-        return true;
-    }
-
     public virtual void OnDeserialized()
     {
         foreach (DatabaseInfo database in Databases.Values)
