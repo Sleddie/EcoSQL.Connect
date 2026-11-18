@@ -1,7 +1,7 @@
-﻿using EcoSQL.Request;
+﻿using EcoSQL.Connect;
 using System.Data.Common;
 
-namespace EcoSQL.Connect;
+namespace EcoSQL.Request;
 
 public static partial class Select
 {

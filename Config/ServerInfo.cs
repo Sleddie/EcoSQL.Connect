@@ -1,9 +1,8 @@
-using EcoSQL.Request;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
-namespace EcoSQL.Connect;
+namespace EcoSQL.Connect.Config;
 
 public class ServerInfo : IValidatableObject, IJsonOnDeserialized
 {
