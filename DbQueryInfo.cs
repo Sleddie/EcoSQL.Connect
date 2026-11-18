@@ -5,7 +5,7 @@ namespace EcoSQL.Connect;
 
 public class DbQueryInfo : QueryInfo, IValidatableObject
 {
-    public ConnectionInfo? ConnectionInfo { get; set; }
+    public required ConnectionInfo ConnectionInfo { get; set; }
 
     public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

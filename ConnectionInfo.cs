@@ -1,79 +1,94 @@
-﻿using EcoSQL.Request;
+﻿using EcoSQL.Connect.Config;
+using EcoSQL.Dbms;
+using EcoSQL.Request;
 using System.ComponentModel.DataAnnotations;
 
 namespace EcoSQL.Connect;
 
 public class ConnectionInfo : IValidatableObject
 {
-    public const string ConnectionStringFormat =
-        "Host={2}:{3};Database={4};Username={0};Password={1}";
+    public required string ConnectionString { get; init; }
 
-    public required DatabaseInfo Database { get; init; }
-
-    public required UserInfo User { get; init; }
-
-    private protected string? Password { get; set; }
-
-    public void SetPassword(string password) => Password = password;
+    public DatabaseInfo? Database { get; init; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (User is null
-            || string.IsNullOrWhiteSpace(User.Name))
-            yield return new ValidationResult("Empty username.", [nameof(User)]);
+        if (string.IsNullOrWhiteSpace(ConnectionString))
+            yield return new("Empty connection string.", [nameof(ConnectionString)]);
 
-        if (string.IsNullOrWhiteSpace(Password))
-            yield return new ValidationResult("Empty password.", [nameof(Password)]);
+        //if (User is null
+        //    || string.IsNullOrWhiteSpace(User.Name))
+        //    yield return new("Empty username.", [nameof(User)]);
 
-        if (Database is null)
-        {
-            yield return new ValidationResult("No database info.", [nameof(Database)]);
-            yield break;
-        }
+        //if (string.IsNullOrWhiteSpace(Password))
+        //    yield return new("Empty password.", [nameof(Password)]);
 
-        if (string.IsNullOrWhiteSpace(Database.Name))
-            yield return new ValidationResult(
-                "Empty database name.",
-                [nameof(Database), nameof(Database.Name)]);
+        //if (Database is null)
+        //{
+        //    yield return new("No database info.", [nameof(Database)]);
+        //    yield break;
+        //}
 
-        if (Database.Server is null)
-        {
-            yield return new ValidationResult(
-                "No server info.",
-                [nameof(Database), nameof(Database.Server)]);
-            yield break;
-        }
+        //if (string.IsNullOrWhiteSpace(Database.Name))
+        //    yield return new(
+        //        "Empty database name.",
+        //        [nameof(Database), nameof(Database.Name)]);
 
-        if (string.IsNullOrWhiteSpace(Database.Server.Host))
-            yield return new ValidationResult(
-                "Empty server host.",
-                [
-                    nameof(Database),
-                    nameof(Database.Server),
-                    nameof(Database.Server.Host)
-                ]);
+        //if (Database.Server is null)
+        //{
+        //    yield return new(
+        //        "No server info.",
+        //        [nameof(Database), nameof(Database.Server)]);
+        //    yield break;
+        //}
 
-        if (string.IsNullOrWhiteSpace(Database.Server.Port))
-            yield return new ValidationResult(
-                "Empty server port.",
-                [
-                    nameof(Database),
-                    nameof(Database.Server),
-                    nameof(Database.Server.Port)
-                ]);
+        //if (string.IsNullOrWhiteSpace(Database.Server.Host))
+        //    yield return new(
+        //        "Empty server host.",
+        //        [
+        //            nameof(Database),
+        //            nameof(Database.Server),
+        //            nameof(Database.Server.Host)
+        //        ]);
+
+        //if (string.IsNullOrWhiteSpace(Database.Server.Port))
+        //    yield return new(
+        //        "Empty server port.",
+        //        [
+        //            nameof(Database),
+        //            nameof(Database.Server),
+        //            nameof(Database.Server.Port)
+        //        ]);
     }
 
-    internal string GetConnectionString(IMessageUnit? messageUnit = null)
-    {
-        if (!this.IsValid(messageUnit))
-            return "";
+    internal string GetConnectionString(IMessageUnit? messageUnit = null) =>
+        this.IsValid(messageUnit) ? ConnectionString : "";
 
-        return string.Format(
-            ConnectionStringFormat,
-            User.Name,
-            Password,
-            Database.Server!.Host,
-            Database.Server!.Port,
-            Database.Name);
-    }
+    public static implicit operator ConnectionInfo(string connectionString) =>
+        new() { ConnectionString = connectionString };
+
+    #region obsolete
+
+    [Obsolete($"Use {nameof(ConnectionStringParameters)} to set parameters " +
+        $"and {nameof(IDbmsProviderAdapter.GetConnectionString)} method " +
+        $"to get the connection string instead.")]
+    public const string ConnectionStringFormat =
+        ""; //"Host={2}:{3};Database={4};Username={0};Password={1}";
+
+    [Obsolete($"Use {nameof(ConnectionStringParameters)} to set parameters " +
+        $"and {nameof(IDbmsProviderAdapter.GetConnectionString)} method " +
+        $"to get the connection string instead.")]
+    public UserInfo? User { get => null; init { } }
+
+    [Obsolete($"Use {nameof(ConnectionStringParameters)} to set parameters " +
+        $"and {nameof(IDbmsProviderAdapter.GetConnectionString)} method " +
+        $"to get the connection string instead.")]
+    private protected string? Password { get => null; set { } }
+
+    [Obsolete($"Use {nameof(ConnectionStringParameters)} to set parameters " +
+        $"and {nameof(IDbmsProviderAdapter.GetConnectionString)} method " +
+        $"to get the connection string instead.")]
+    public void SetPassword(string password) { }
+
+    #endregion
 }
