@@ -13,6 +13,10 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageTags>sql;query;database config;net-10</PackageTags>
+    <PackageReleaseNotes># v1.0
+Database and server configuration classes;
+More advanced query methods.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
