@@ -1,16 +1,23 @@
 ﻿using EcoSQL.Connect.Config;
-using EcoSQL.Dbms;
-using EcoSQL.Request;
 using System.ComponentModel.DataAnnotations;
 
 namespace EcoSQL.Connect;
 
+/// <summary>Represents the information about database connection.</summary>
 public class ConnectionInfo : IValidatableObject
 {
+    /// <summary>Gets or sets the connection string.</summary>
     public required string ConnectionString { get; init; }
 
+    /// <summary>Gets or sets the database information of <see cref="DatabaseInfo"/> type.</summary>
     public DatabaseInfo? Database { get; init; }
 
+    /// <summary>Gets or sets the user information of <see cref="UserInfo"/> type.</summary>
+    public UserInfo? User { get; init; }
+
+    /// <summary>Validates the connection information properties.</summary>
+    /// <param name="validationContext">The validation context.</param>
+    /// <returns>An enumerable of validation results.</returns>
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (string.IsNullOrWhiteSpace(ConnectionString))
@@ -61,34 +68,9 @@ public class ConnectionInfo : IValidatableObject
         //        ]);
     }
 
-    internal string GetConnectionString(IMessageUnit? messageUnit = null) =>
-        this.IsValid(messageUnit) ? ConnectionString : "";
-
+    /// <summary>Converts the connection string to a <see cref="ConnectionInfo"/> instance.</summary>
+    /// <param name="connectionString">The connection string.</param>
+    /// <returns>The <see cref="ConnectionInfo"/> instance.</returns>
     public static implicit operator ConnectionInfo(string connectionString) =>
         new() { ConnectionString = connectionString };
-
-    #region obsolete
-
-    [Obsolete($"Use {nameof(ConnectionStringParameters)} to set parameters " +
-        $"and {nameof(IDbmsProviderAdapter.GetConnectionString)} method " +
-        $"to get the connection string instead.")]
-    public const string ConnectionStringFormat =
-        ""; //"Host={2}:{3};Database={4};Username={0};Password={1}";
-
-    [Obsolete($"Use {nameof(ConnectionStringParameters)} to set parameters " +
-        $"and {nameof(IDbmsProviderAdapter.GetConnectionString)} method " +
-        $"to get the connection string instead.")]
-    public UserInfo? User { get => null; init { } }
-
-    [Obsolete($"Use {nameof(ConnectionStringParameters)} to set parameters " +
-        $"and {nameof(IDbmsProviderAdapter.GetConnectionString)} method " +
-        $"to get the connection string instead.")]
-    private protected string? Password { get => null; set { } }
-
-    [Obsolete($"Use {nameof(ConnectionStringParameters)} to set parameters " +
-        $"and {nameof(IDbmsProviderAdapter.GetConnectionString)} method " +
-        $"to get the connection string instead.")]
-    public void SetPassword(string password) { }
-
-    #endregion
 }

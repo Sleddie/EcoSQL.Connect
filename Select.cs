@@ -3,6 +3,7 @@ using System.Data.Common;
 
 namespace EcoSQL.Request;
 
+/// <inheritdoc/>
 public static partial class Select
 {
     extension(DbProviderFactory dbProviderFactory)
@@ -21,7 +22,7 @@ public static partial class Select
                 return false;
 
             return dbProviderFactory.SelectDataTable(
-                queryInfo.ConnectionInfo!.GetConnectionString(),
+                queryInfo.ConnectionInfo!.ConnectionString,
                 queryInfo,
                 resultTableInfoUnit,
                 queryAdditionalInfo);
@@ -41,7 +42,7 @@ public static partial class Select
                 return false;
 
             return await dbProviderFactory.SelectDataTableAsync(
-                queryInfo.ConnectionInfo!.GetConnectionString(),
+                queryInfo.ConnectionInfo!.ConnectionString,
                 queryInfo,
                 resultTableInfoUnit,
                 queryAdditionalInfo);
@@ -62,7 +63,7 @@ public static partial class Select
                 return false;
 
             return dbProviderFactory.SelectCollection(
-                queryInfo.ConnectionInfo!.GetConnectionString(),
+                queryInfo.ConnectionInfo!.ConnectionString,
                 queryInfo,
                 resultCollectionInfoUnit,
                 queryAdditionalInfo);
@@ -83,7 +84,7 @@ public static partial class Select
                 return false;
 
             return await dbProviderFactory.SelectCollectionAsync(
-                queryInfo.ConnectionInfo!.GetConnectionString(),
+                queryInfo.ConnectionInfo!.ConnectionString,
                 queryInfo,
                 resultCollectionInfoUnit,
                 queryAdditionalInfo);

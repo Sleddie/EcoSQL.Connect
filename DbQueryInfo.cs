@@ -3,10 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EcoSQL.Connect;
 
+/// <inheritdoc/>
 public class DbQueryInfo : QueryInfo, IValidatableObject
 {
+    /// <summary>Gets or sets the connection information.</summary>
     public required ConnectionInfo ConnectionInfo { get; set; }
 
+    /// <inheritdoc/>
     public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         foreach (var validationResult in base.Validate(validationContext))
