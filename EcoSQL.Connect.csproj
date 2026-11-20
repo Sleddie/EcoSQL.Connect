@@ -6,17 +6,16 @@
     <Nullable>enable</Nullable>
     <Version>1.0</Version>
     <Authors>Sleddie</Authors>
-    <Company>Blue-Yellow</Company>
-    <Copyright>2026 Blue-Yellow</Copyright>
-    <PackageProjectUrl>https://github.com/Sleddie/EcoSQL.Connect</PackageProjectUrl>
+    <Copyright>Copyright (c) 2026 Sleddie</Copyright>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageTags>sql;query;database config;net-10</PackageTags>
+    <PackageProjectUrl>https://github.com/Sleddie/EcoSQL.Connect</PackageProjectUrl>
     <PackageReleaseNotes># v1.0
 Database and server configuration classes;
 More advanced query methods.</PackageReleaseNotes>
+    <PackageTags>sql;query;database config;net-10</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
