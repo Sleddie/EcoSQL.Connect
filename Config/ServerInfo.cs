@@ -66,7 +66,10 @@ public class ServerInfo : IValidatableObject, IJsonOnDeserialized
         }
 
         if (!isValid)
-            yield return new($"Server {props} should be specified.", [nameof(Host), nameof(Port)]);
+            yield return new($"Not specified server {props}.", [nameof(Host), nameof(Port)]);
+
+        if ((_databases is null || _databases.Count == 0) && ServiceDatabase is null)
+            yield return new("No databases.", [nameof(Databases), nameof(ServiceDatabase)]);
     }
 
     /// <summary>Called when the object is deserialized from JSON.</summary>

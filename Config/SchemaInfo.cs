@@ -15,7 +15,21 @@ public class SchemaInfo : IValidatableObject, IJsonOnDeserialized
     /// <summary>Validates the schema information properties.</summary>
     /// <param name="validationContext">The validation context.</param>
     /// <returns>An enumerable of validation results.</returns>
-    public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext) => [];
+    public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (string.IsNullOrWhiteSpace(Name))
+            yield return new("Empty schema name.", [nameof(Name)]);
+
+        if (Database is not null)
+        {
+            foreach (var result in Database.Validate(validationContext))
+                yield return result;
+        }
+        //else
+        //{
+        //    yield return new("No database info.", [nameof(Database)]);
+        //}
+    }
 
     /// <summary>Called when the object is deserialized from JSON.</summary>
     public virtual void OnDeserialized() { }

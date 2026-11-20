@@ -30,7 +30,24 @@ public class DatabaseInfo : IValidatableObject, IJsonOnDeserialized
     /// <summary>Validates the database information properties.</summary>
     /// <param name="validationContext">The validation context.</param>
     /// <returns>An enumerable of validation results.</returns>
-    public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext) => [];
+    public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (string.IsNullOrWhiteSpace(Name))
+            yield return new("Empty database name.", [nameof(Name)]);
+
+        if ((_schemas is null || _schemas.Count == 0) && DefaultSchema is null)
+            yield return new("No schemas.", [nameof(Schemas), nameof(DefaultSchema)]);
+
+        if (Server is not null)
+        {
+            foreach (var result in Server.Validate(validationContext))
+                yield return result;
+        }
+        //else
+        //{
+        //    yield return new("No server info.", [nameof(Server)]);
+        //}
+    }
 
     /// <summary>Called when the object is deserialized from JSON.</summary>
     public virtual void OnDeserialized()

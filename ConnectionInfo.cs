@@ -23,49 +23,25 @@ public class ConnectionInfo : IValidatableObject
         if (string.IsNullOrWhiteSpace(ConnectionString))
             yield return new("Empty connection string.", [nameof(ConnectionString)]);
 
-        //if (User is null
-        //    || string.IsNullOrWhiteSpace(User.Name))
-        //    yield return new("Empty username.", [nameof(User)]);
-
-        //if (string.IsNullOrWhiteSpace(Password))
-        //    yield return new("Empty password.", [nameof(Password)]);
-
-        //if (Database is null)
+        if (Database is not null)
+        {
+            foreach (var result in Database.Validate(validationContext))
+                yield return result;
+        }
+        //else
         //{
         //    yield return new("No database info.", [nameof(Database)]);
-        //    yield break;
         //}
 
-        //if (string.IsNullOrWhiteSpace(Database.Name))
-        //    yield return new(
-        //        "Empty database name.",
-        //        [nameof(Database), nameof(Database.Name)]);
-
-        //if (Database.Server is null)
+        if (User is not null)
+        {
+            foreach (var result in User.Validate(validationContext))
+                yield return result;
+        }
+        //else
         //{
-        //    yield return new(
-        //        "No server info.",
-        //        [nameof(Database), nameof(Database.Server)]);
-        //    yield break;
+        //    yield return new("No user info.", [nameof(User)]);
         //}
-
-        //if (string.IsNullOrWhiteSpace(Database.Server.Host))
-        //    yield return new(
-        //        "Empty server host.",
-        //        [
-        //            nameof(Database),
-        //            nameof(Database.Server),
-        //            nameof(Database.Server.Host)
-        //        ]);
-
-        //if (string.IsNullOrWhiteSpace(Database.Server.Port))
-        //    yield return new(
-        //        "Empty server port.",
-        //        [
-        //            nameof(Database),
-        //            nameof(Database.Server),
-        //            nameof(Database.Server.Port)
-        //        ]);
     }
 
     /// <summary>Converts the connection string to a <see cref="ConnectionInfo"/> instance.</summary>
