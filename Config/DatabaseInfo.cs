@@ -35,8 +35,9 @@ public class DatabaseInfo : IValidatableObject, IJsonOnDeserialized
         if (string.IsNullOrWhiteSpace(Name))
             yield return new("Empty database name.", [nameof(Name)]);
 
-        if ((_schemas is null || _schemas.Count == 0) && DefaultSchema is null)
-            yield return new("No schemas.", [nameof(Schemas), nameof(DefaultSchema)]);
+        if ((_schemas is null || _schemas.Count == 0)
+            && string.IsNullOrWhiteSpace(DefaultSchemaName))
+            yield return new("No schemas.", [nameof(Schemas), nameof(DefaultSchemaName)]);
 
         if (Server is not null)
         {
