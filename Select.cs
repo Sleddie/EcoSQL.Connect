@@ -1,10 +1,10 @@
 ﻿using EcoSQL.Connect;
 using System.Data.Common;
 
-namespace EcoSQL.Request;
+namespace EcoSQL.Connect;
 
-/// <inheritdoc/>
-public static partial class Select
+/// <summary>Provides static and extension methods for querying data from a database.</summary>
+public static class Select
 {
     extension(DbProviderFactory dbProviderFactory)
     {
