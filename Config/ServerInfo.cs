@@ -13,14 +13,17 @@ public class ServerInfo : IValidatableObject, IJsonOnDeserialized
     /// <summary>Gets or sets the name of the server.</summary>
     public string Name
     {
-        get => field ??= ToString();
+        get => field ??= HostPort;
         init;
     }
 
     /// <summary>Gets or sets the host of the server.</summary>
-    public required string Host { get; init; }
+    public string? Host { get; init; }
     /// <summary>Gets or sets the port of the server.</summary>
-    public required string Port { get; init; }
+    public int? Port { get; init; }
+
+    /// <summary>Gets the <see cref="Host"/> and <see cref="Port"/> as a string in the format "host:port".</summary>
+    public string HostPort => $"{Host}:{Port}";
 
     /// <summary>Gets or sets the databases of the server.</summary>
     public IReadOnlyDictionary<string, DatabaseInfo> Databases
@@ -30,15 +33,12 @@ public class ServerInfo : IValidatableObject, IJsonOnDeserialized
     }
 
     /// <summary>Gets or sets the name of the service database.</summary>
-    public string? ServiceDatabaseName { get; init; }
+    public string? ServiceDatabaseName { get => ServiceDatabase?.Name ?? field; init; }
     /// <summary>Gets or sets the service database of the server.</summary>
-    public DatabaseInfo? ServiceDatabase { get; protected set; }
+    public DatabaseInfo? ServiceDatabase { get; set; }
 
     /// <summary>Returns a string that represents the server.</summary>
-    public override string ToString()
-    {
-        return $"{Host}:{Port}";
-    }
+    public override string ToString() => Name;
 
     /// <summary>Validates the server information properties.</summary>
     /// <param name="validationContext">The validation context.</param>
@@ -50,11 +50,12 @@ public class ServerInfo : IValidatableObject, IJsonOnDeserialized
 
         if (string.IsNullOrWhiteSpace(Host))
         {
-            props = "ip-address";
+            props = "ip-address (or host name)";
             isValid = false;
         }
 
-        if (string.IsNullOrWhiteSpace(Port))
+        //if (string.IsNullOrWhiteSpace(Port))
+        if (Port is not int)
         {
             if (props != "")
             {
@@ -84,8 +85,7 @@ public class ServerInfo : IValidatableObject, IJsonOnDeserialized
         if (string.IsNullOrWhiteSpace(ServiceDatabaseName))
             return;
 
-        if (ServiceDatabase != Databases[ServiceDatabaseName])
-            ServiceDatabase = Databases[ServiceDatabaseName];
+        ServiceDatabase ??= Databases[ServiceDatabaseName];
     }
 }
 
