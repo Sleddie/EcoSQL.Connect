@@ -15,12 +15,12 @@ public interface IDbmsProviderAdapter
     DbConnectionStringBuilder GetDbConnectionStringBuilder();
 
     /// <summary>Validates the connection string parameters instance for chosen DBMS provider.</summary>
-    /// <param name="connectionStringParameters">The connection string parameters.</param>
+    /// <param name="parameters">The connection string parameters.</param>
     /// <returns>True if the parameters is eligible for the provider; otherwise, false.</returns>
     bool ValidateConnectionStringParameters(ConnectionStringParameters parameters);
 
     /// <summary>Gets the connection string for the specified connection string parameters.</summary>
-    /// <param name="connectionStringParameters">The connection string parameters.</param>
+    /// <param name="parameters">The connection string parameters.</param>
     /// <returns>The connection string.</returns>
     string GetConnectionString(ConnectionStringParameters parameters);
 }
