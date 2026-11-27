@@ -17,7 +17,7 @@ public class ServerInfo : IValidatableObject, IJsonOnDeserialized
         init;
     }
 
-    /// <summary>Gets or sets the host of the server.</summary>
+    /// <summary>Gets or sets the host name or ip-address of the server.</summary>
     public string? Host { get; init; }
     /// <summary>Gets or sets the port of the server.</summary>
     public int? Port { get; init; }
