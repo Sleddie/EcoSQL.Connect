@@ -1,14 +1,23 @@
 ﻿namespace EcoSQL.Connect;
 
 /// <summary>Represents the information needed to create a database connection string.</summary>
-/// <param name="Server">The server name or address.</param>
-/// <param name="Database">The database name.</param>
-/// <param name="Username">The username for authentication.</param>
-/// <param name="Password">The password for authentication.</param>
-/// <param name="Timeout">The connection timeout in seconds.</param>
-public record ConnectionStringParameters(
-    string Server,
-    string Database,
-    string? Username = null,
-    string? Password = null,
-    int Timeout = 15);
+public class ConnectionStringParameters
+{
+    /// <summary>A server host or a file URI.</summary>
+    public string? DataSource { get; set; }
+
+    /// <summary>A server port.</summary>
+    public int? Port { get; set; }
+
+    /// <summary>The database name.</summary>
+    public string? Database {  get; set; }
+
+    /// <summary>A user name for authentication.</summary>
+    public string? Username { get; set; }
+
+    /// <summary>A password for authentication.</summary>
+    public string? Password { get; set; }
+
+    /// <summary>The connection timeout in seconds.</summary>
+    public int? Timeout { get; set; }
+}
