@@ -20,9 +20,9 @@ public class DatabaseInfo : IValidatableObject, IJsonOnDeserialized
     }
 
     /// <summary>Gets or sets the name of the default schema.</summary>
-    public string? DefaultSchemaName { get; init; }
+    public string? DefaultSchemaName { get => DefaultSchema?.Name ?? field; init; }
     /// <summary>Gets or sets the default schema of the database.</summary>
-    public SchemaInfo? DefaultSchema { get; protected set; }
+    public SchemaInfo? DefaultSchema { get; set; }
 
     /// <summary>Gets or sets the server information.</summary>
     public ServerInfo? Server { get; protected internal set; }
@@ -61,7 +61,6 @@ public class DatabaseInfo : IValidatableObject, IJsonOnDeserialized
         if (string.IsNullOrWhiteSpace(DefaultSchemaName))
             return;
 
-        if (DefaultSchema != Schemas[DefaultSchemaName])
-            DefaultSchema = Schemas[DefaultSchemaName];
+        DefaultSchema ??= Schemas[DefaultSchemaName];
     }
 }
